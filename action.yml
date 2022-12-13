@@ -4,10 +4,14 @@ inputs:
   path:
     description: "Where dependencies should be copied to"
     required: true
-  mu-plugins-repo:
+  mu-repo:
     description: "The MU Plugins repo"
     required: false
     default: "saucal/saucal-mu-plugins-built"
+  mu-branch:
+    description: "The MU Plugins repo branch"
+    required: false
+    default: "main"
   add-mu-plugins:
     description: "Whether or not to add our MU-Plugins"
     required: false
@@ -31,7 +35,8 @@ runs:
       uses: saucal/action-checkout-extended@v2
       with: 
         path: "${{ inputs.path }}/mu-plugins"
-        repo: ${{ inputs.mu-plugins-repo }}
+        repo: ${{ inputs.mu-repo }}
+        use: ${{ inputs.mu-branch }}
 
     - name: Cleanup GIT files from MU Plugins directory
       if: ${{ steps.mu-plugins-check.outputs.do_add == 'true' }}
