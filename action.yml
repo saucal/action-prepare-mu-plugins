@@ -4,6 +4,9 @@ inputs:
   path:
     description: "Where dependencies should be copied to"
     required: true
+  git-token:
+    description: "GIT Token to use when checking out and commiting"
+    required: true
   mu-repo:
     description: "The MU Plugins repo"
     required: false
@@ -34,6 +37,7 @@ runs:
       if: ${{ steps.mu-plugins-check.outputs.do_add == 'true' }}
       uses: saucal/action-checkout-extended@v2
       with: 
+        token: ${{ inputs.git-token }}
         path: "${{ inputs.path }}/mu-plugins"
         repo: ${{ inputs.mu-repo }}
         use: ${{ inputs.mu-branch }}
