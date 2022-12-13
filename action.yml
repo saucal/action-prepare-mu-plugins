@@ -20,8 +20,8 @@ runs:
       id: mu-plugins-check
       shell: bash
       run: |
-        if [ "${{ inputs.add-mu-plugins }}" == "auto" && -d "${{ inputs.path }}/client-mu-plugins" && ! -d "${{ inputs.path }}/vip-config" ]; then
-          echo "do_add=true" >> $GITHUB_OUTPUT
+        if [ "${{ inputs.add-mu-plugins }}" == "auto" ]; then
+          [ -d "${{ inputs.path }}/client-mu-plugins" ] && [ ! -d "${{ inputs.path }}/vip-config" ] && echo "do_add=true" >> $GITHUB_OUTPUT
         else
           echo "do_add=${{ inputs.add-mu-plugins }}" >> $GITHUB_OUTPUT
         fi
