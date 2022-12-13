@@ -21,7 +21,7 @@ runs:
       shell: bash
       run: |
         if [ "${{ inputs.add-mu-plugins }}" == "auto" ]; then
-          [ -d "${{ inputs.path }}/client-mu-plugins" ] && [ ! -d "${{ inputs.path }}/vip-config" ] && echo "do_add=true" >> $GITHUB_OUTPUT
+          [ -d "${{ inputs.path }}/client-mu-plugins" ] && [ ! -d "${{ inputs.path }}/vip-config" ] && echo "do_add=true" >> $GITHUB_OUTPUT || echo "do_add=false" >> $GITHUB_OUTPUT
         else
           echo "do_add=${{ inputs.add-mu-plugins }}" >> $GITHUB_OUTPUT
         fi
