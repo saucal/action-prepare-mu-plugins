@@ -1,0 +1,40 @@
+name: "Prepare MU Plugins"
+description: ""
+inputs:
+  path:
+    description: "Where dependencies should be copied to"
+    required: true
+  mu-plugins-repo:
+    description: "The MU Plugins repo"
+    required: false
+    default: "saucal/saucal-mu-plugins-built"
+  add-mu-plugins:
+    description: "Whether or not to add our MU-Plugins"
+    required: false
+    default: "auto"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check if we need MU-Plugins
+      id: mu-plugins-check
+      shell: bash
+      run: |
+        if [ "${{ inputs.add-mu-plugins }}" == "auto" && -d "${{ inputs.path }}/client-mu-plugins" && ! -d "${{ inputs.path }}/vip-config" ]; then
+          echo "do_add=true" >> $GITHUB_OUTPUT
+        else
+          echo "do_add=${{ inputs.add-mu-plugins }}" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Add MU Plugins
+      if: ${{ steps.mu-plugins-check.outputs.do_add == 'true' }}
+      uses: saucal/action-checkout-extended@v2
+      with: 
+        path: "${{ inputs.path }}/mu-plugins"
+        repo: ${{ inputs.mu-plugins-repo }}
+
+    - name: Cleanup GIT files from MU Plugins directory
+      if: ${{ steps.mu-plugins-check.outputs.do_add == 'true' }}
+      shell: bash
+      run: rm -rf "${{ inputs.path }}/mu-plugins/.git"
+
