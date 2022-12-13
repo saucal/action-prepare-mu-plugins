@@ -18,9 +18,6 @@ You should be all set with these defaults.
         git-token: ${{ secrets.CI_BOT_TOKEN }}
 
 ```
-
-This should be compatible with any codebase structure, but it has been tested with a wp-content rooted structure (similar to [VIP Skeleton](https://github.com/Automattic/vip-go-skeleton))
-
 ## Full options
 
 ```yml
