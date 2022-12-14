@@ -24,17 +24,21 @@ runs:
   using: "composite"
   steps:
     - name: Check if we need MU-Plugins
-      id: mu-plugins-check
+      id: vars
       shell: bash
       run: |
         if [ "${{ inputs.add-mu-plugins }}" == "auto" ]; then
-          [ -d "${{ inputs.path }}/client-mu-plugins" ] && [ ! -d "${{ inputs.path }}/vip-config" ] && echo "do_add=true" >> $GITHUB_OUTPUT || echo "do_add=false" >> $GITHUB_OUTPUT
+          if [ -d "${{ inputs.path }}/client-mu-plugins" ] && [ ! -d "${{ inputs.path }}/vip-config" ]; then
+            echo "do_add=true" >> $GITHUB_OUTPUT
+          else
+            echo "do_add=false" >> $GITHUB_OUTPUT
+          fi
         else
           echo "do_add=${{ inputs.add-mu-plugins }}" >> $GITHUB_OUTPUT
         fi
 
     - name: Add MU Plugins
-      if: ${{ steps.mu-plugins-check.outputs.do_add == 'true' }}
+      if: ${{ steps.vars.outputs.do_add == 'true' }}
       uses: saucal/action-checkout-extended@v2
       with: 
         token: ${{ inputs.git-token }}
@@ -43,7 +47,7 @@ runs:
         use: ${{ inputs.mu-branch }}
 
     - name: Cleanup GIT files from MU Plugins directory
-      if: ${{ steps.mu-plugins-check.outputs.do_add == 'true' }}
+      if: ${{ steps.vars.outputs.do_add == 'true' }}
       shell: bash
       run: rm -rf "${{ inputs.path }}/mu-plugins/.git"
 
