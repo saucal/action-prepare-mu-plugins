@@ -40,7 +40,8 @@ runs:
         else
           echo "do_add=${{ inputs.add-mu-plugins }}" >> $GITHUB_OUTPUT
         fi
-        mu_plugins_path=${${{ inputs.mu-plugins-path }}#"/"}
+        mu_plugins_path=${{ inputs.mu-plugins-path }}
+        mu_plugins_path=${mu_plugins_path#"/"}
         mu_plugins_path=${mu_plugins_path%"/"}
         echo "mu_plugins_path=$mu_plugins_path" >> $GITHUB_OUTPUT
 
