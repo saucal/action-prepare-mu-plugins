@@ -19,6 +19,10 @@ inputs:
     description: "Whether or not to add our MU-Plugins"
     required: false
     default: "auto"
+  mu-plugins-path:
+    description: "The path to use for MU-Plugins"
+    required: false
+    default: "mu-plugins"
 
 runs:
   using: "composite"
@@ -36,18 +40,21 @@ runs:
         else
           echo "do_add=${{ inputs.add-mu-plugins }}" >> $GITHUB_OUTPUT
         fi
+        mu_plugins_path=${${{ inputs.mu-plugins-path }}#"/"}
+        mu_plugins_path=${mu_plugins_path%"/"}
+        echo "mu_plugins_path=$mu_plugins_path" >> $GITHUB_OUTPUT
 
     - name: Add MU Plugins
       if: ${{ steps.vars.outputs.do_add == 'true' }}
       uses: saucal/action-checkout-extended@v2
       with: 
         token: ${{ inputs.git-token }}
-        path: "${{ inputs.path }}/mu-plugins"
+        path: "${{ inputs.path }}/${{ steps.vars.output.mu_plugins_path }}"
         repo: ${{ inputs.mu-repo }}
         use: ${{ inputs.mu-branch }}
 
     - name: Cleanup GIT files from MU Plugins directory
       if: ${{ steps.vars.outputs.do_add == 'true' }}
       shell: bash
-      run: rm -rf "${{ inputs.path }}/mu-plugins/.git"
+      run: rm -rf "${{ inputs.path }}/${{ steps.vars.output.mu_plugins_path }}/.git"
 
