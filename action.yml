@@ -49,12 +49,12 @@ runs:
       uses: saucal/action-checkout-extended@v2
       with: 
         token: ${{ inputs.git-token }}
-        path: "${{ inputs.path }}/${{ steps.vars.output.mu_plugins_path }}"
+        path: "${{ inputs.path }}/${{ steps.vars.outputs.mu_plugins_path }}"
         repo: ${{ inputs.mu-repo }}
         use: ${{ inputs.mu-branch }}
 
     - name: Cleanup GIT files from MU Plugins directory
       if: ${{ steps.vars.outputs.do_add == 'true' }}
       shell: bash
-      run: rm -rf "${{ inputs.path }}/${{ steps.vars.output.mu_plugins_path }}/.git"
+      run: rm -rf "${{ inputs.path }}/${{ steps.vars.outputs.mu_plugins_path }}/.git"
 
