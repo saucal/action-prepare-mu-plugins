@@ -40,4 +40,7 @@ You should be all set with these defaults.
         # Whether or not to override the auto-detection of a suitable repo.
         # Possible values: "auto"|"true"|"false"
         add-mu-plugins: "auto"
+
+        # The relative path to use for MU Plugins. By default set to "mu-plugins"
+        mu-plugins-path: "mu-plugins"
 ```
