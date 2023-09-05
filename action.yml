@@ -18,7 +18,7 @@ inputs:
   mu-branch:
     description: "The MU Plugins repo branch"
     required: false
-    default: "main"
+    default: "develop"
   add-mu-plugins:
     description: "Whether or not to add our MU-Plugins"
     required: false
