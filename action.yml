@@ -11,6 +11,10 @@ inputs:
     description: "The MU Plugins loader repo"
     required: false
     default: "saucal/saucal-mu-plugins-loader"
+  mu-plugins-loader-branch:
+    description: "The MU Plugins loader repo branch"
+    required: false
+    default: "main"
   mu-repo:
     description: "The MU Plugins repo"
     required: false
@@ -64,7 +68,7 @@ runs:
         token: ${{ inputs.git-token }}
         path: "${{ inputs.path }}/${{ steps.vars.outputs.mu_plugins_path }}"
         repo: ${{ inputs.mu-plugins-loader-repo }}
-        use: ${{ inputs.mu-branch }}
+        use: ${{ inputs.mu-plugins-loader-branch }}
 
     - name: Add MU Plugins
       if: ${{ steps.vars.outputs.do_add == 'true' }}
