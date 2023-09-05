@@ -7,6 +7,10 @@ inputs:
   git-token:
     description: "GIT Token to use when checking out and commiting"
     required: true
+  mu-plugins-loader-repo:
+    description: "The MU Plugins loader repo"
+    required: false
+    default: "saucal/saucal-mu-plugins-loader"
   mu-repo:
     description: "The MU Plugins repo"
     required: false
@@ -23,6 +27,10 @@ inputs:
     description: "The path to use for MU-Plugins"
     required: false
     default: "mu-plugins"
+  mu-platform-plugins-path:
+    description: "The path to use for the platform MU-Plugins"
+    required: false
+    default: "saucal-mu-plugins"
 
 runs:
   using: "composite"
@@ -44,18 +52,34 @@ runs:
         mu_plugins_path=${mu_plugins_path#"/"}
         mu_plugins_path=${mu_plugins_path%"/"}
         echo "mu_plugins_path=$mu_plugins_path" >> $GITHUB_OUTPUT
+        mu_platform_plugins_path=${{ inputs.mu-platform-plugins-path }}
+        mu_platform_plugins_path=${mu_platform_plugins_path#"/"}
+        mu_platform_plugins_path=${mu_platform_plugins_path%"/"}
+        echo "mu_platform_plugins_path=$mu_platform_plugins_path" >> $GITHUB_OUTPUT
+
+    - name: Add Plugins loader
+      if: ${{ steps.vars.outputs.do_add == 'true' }}
+      uses: saucal/action-checkout-extended@v2
+      with: 
+        token: ${{ inputs.git-token }}
+        path: "${{ inputs.path }}/${{ steps.vars.outputs.mu_plugins_path }}"
+        repo: ${{ inputs.mu-plugins-loader-repo }}
+        use: ${{ inputs.mu-branch }}
 
     - name: Add MU Plugins
       if: ${{ steps.vars.outputs.do_add == 'true' }}
       uses: saucal/action-checkout-extended@v2
       with: 
         token: ${{ inputs.git-token }}
-        path: "${{ inputs.path }}/${{ steps.vars.outputs.mu_plugins_path }}"
+        path: "${{ inputs.path }}/${{ steps.vars.outputs.mu_platform_plugins_path }}"
         repo: ${{ inputs.mu-repo }}
         use: ${{ inputs.mu-branch }}
 
     - name: Cleanup GIT files from MU Plugins directory
       if: ${{ steps.vars.outputs.do_add == 'true' }}
       shell: bash
-      run: rm -rf "${{ inputs.path }}/${{ steps.vars.outputs.mu_plugins_path }}/.git"
+      run: 
+        |
+        rm -rf "${{ inputs.path }}/${{ steps.vars.outputs.mu_plugins_path }}/.git"
+        rm -rf "${{ inputs.path }}/${{ steps.vars.outputs.mu_platform_plugins_path }}/.git"
 
