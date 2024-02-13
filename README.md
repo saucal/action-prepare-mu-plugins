@@ -31,6 +31,12 @@ You should be all set with these defaults.
         # Token to use throughout the process
         git-token: ""
 
+        # The MU Plugins Loader repo to be used
+        mu-plugins-loader-repo: 'saucal/saucal-mu-plugins-loader'
+
+        # The branch to use from the Loader repo
+        mu-plugins-loader-branch: 'main'
+
         # The MU Plugins repo.
         mu-repo: "saucal/saucal-mu-plugins-built"
 
@@ -43,4 +49,7 @@ You should be all set with these defaults.
 
         # The relative path to use for MU Plugins. By default set to "mu-plugins"
         mu-plugins-path: "mu-plugins"
+
+        # The path to use for the platform MU-Plugins
+        mu-platform-plugins-path: 'saucal-mu-plugins'
 ```
